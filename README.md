@@ -1,6 +1,7 @@
 Konuşarak Öğren Chat Api
 
-Basitlik için N-layer architecture ile oluşturuldu.
+Basitlik için N-layer architecture ile oluşturuldu. Azure ile Deploy edildi.
+https://chatapiapi-g8cacedmf6b0gsdw.spaincentral-01.azurewebsites.net/api/ üzerinden istekleri alır.
 Core, Data Access, Business logic, Presentation
 
 Core katmanında Entityler yer almakta
