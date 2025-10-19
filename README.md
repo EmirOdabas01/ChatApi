@@ -17,3 +17,4 @@ Busines katmanında Python servisine istek atarak gerçek zamanlı duygu analizi
 Entityleri kullanmamak için Dto kullanıldı.
 
 Presantaionda dışarıyla iletişimi sağlamak için iki entity için de controllerlar oluşturuldu.
+ExceptionHandlingMiddleware ile exception fırlatılması durumunda uygulamanın çökmemesi sağlandı.
