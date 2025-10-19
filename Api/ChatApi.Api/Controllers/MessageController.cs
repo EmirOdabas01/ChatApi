@@ -1,5 +1,5 @@
-﻿using ChatApi.BL;
-using ChatApi.BL.DTOs;
+﻿using ChatApi.BL.DTOs;
+using ChatApi.BL.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

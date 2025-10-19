@@ -1,10 +1,14 @@
-using ChatApi.BL;
+using ChatApi.BL.Interfaces;
+using ChatApi.BL.Services;
 using ChatApi.DA;
+using ChatApi.DA.Interfaces;
+using ChatApi.DA.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCors(corsOption => corsOption.AddDefaultPolicy(options
+    => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
-// Add services to the container.
 builder.Services.AddDbContext<ChatApiContext>(options => options.UseSqlite("Data Source=chat.db"));
 
 builder.Services.AddControllers();
@@ -19,18 +23,19 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddHttpClient();
 
 var app = builder.Build();
+app.UseMiddleware<ChatApi.Api.Exceptions.ExceptionHandlingMiddleware>();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseCors();
 
+app.UseRouting();
 app.MapControllers();
 
 app.Run();

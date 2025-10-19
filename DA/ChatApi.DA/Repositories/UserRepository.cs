@@ -1,4 +1,5 @@
 ﻿using ChatApi.Core.Entities;
+using ChatApi.DA.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChatApi.DA
+namespace ChatApi.DA.Repositories
 {
     public class UserRepository : IUserRepository
     {

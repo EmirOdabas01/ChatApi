@@ -1,4 +1,4 @@
-﻿using ChatApi.BL;
+﻿using ChatApi.BL.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

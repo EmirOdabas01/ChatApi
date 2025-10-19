@@ -1,4 +1,5 @@
 ﻿using ChatApi.Core.Entities;
+using ChatApi.DA.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChatApi.DA
+namespace ChatApi.DA.Repositories
 {
     public class MessageRepository : IMessageRepository
     {
@@ -26,7 +27,7 @@ namespace ChatApi.DA
         }
 
         public async Task<List<Message>> GetAllAsync()
-         =>  await _messages.OrderByDescending(m => m.CreatedAt).ToListAsync();
+         =>  await _messages.OrderBy(m => m.CreatedAt).Include(m => m.User).ToListAsync();
 
         public async Task<int> SaveAsync()
          => await _chatApiContext.SaveChangesAsync();

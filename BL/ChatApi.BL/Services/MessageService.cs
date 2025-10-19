@@ -1,6 +1,7 @@
 ﻿using ChatApi.BL.DTOs;
+using ChatApi.BL.Interfaces;
 using ChatApi.Core.Entities;
-using ChatApi.DA;
+using ChatApi.DA.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using static System.Net.WebRequestMethods;
 
-namespace ChatApi.BL
+namespace ChatApi.BL.Services
 {
     public class MessageService : IMessageService
     {
@@ -45,56 +46,38 @@ namespace ChatApi.BL
                 CreatedAt = message.CreatedAt
             };
         }
-
-        private class AIResponse
-        {
-            public List<object>? data { get; set; }
-        }
-
         private async Task<string> AnalyzeSentimentWithHuggingFace(string text)
         {
-            try
+
+            var apiUrl = "https://pythonservice-2.onrender.com/predict";
+
+            var requestData = new
             {
-                var apiUrl = "http://127.0.0.1:8000/predict";
+                text
+            };
 
-                var requestData = new
+            var json = JsonSerializer.Serialize(requestData);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync(apiUrl, content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<HuggingFaceResponse>(responseContent);
+
+                if (result != null && result.sentiment != null && result.sentiment.Length > 0)
                 {
-                    text = text
-                };
-
-                var json = JsonSerializer.Serialize(requestData);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                var response = await _httpClient.PostAsync(apiUrl, content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    var result = JsonSerializer.Deserialize<HuggingFaceResponse>(responseContent);
-
-                    if (result != null && result.sentiment != null && result.sentiment.Length > 0)
-                    {
-                        return result.sentiment;
-                    }
-                }
-                else
-                {
-                    Console.WriteLine($"Hugging Face API Error: {response.StatusCode}");
+                    return result.sentiment;
                 }
             }
-            catch (Exception ex)
-            {
-                // Log error but don't fail the message sending
-                Console.WriteLine($"Hugging Face sentiment analysis failed: {ex.Message}");
-            }
 
-            return "neutral"; // Fallback sentiment
+            return "neutral"; 
         }
         public class HuggingFaceResponse
         {
             public string sentiment { get; set; }
         }
-    
 
         public async Task<List<MessageResponseDto>> GetAllAsync()
         {
@@ -105,6 +88,7 @@ namespace ChatApi.BL
                 Text = m.Text,
                 Sentiment = m.Sentiment,
                 CreatedAt = m.CreatedAt,
+                userNickName = m.User.NickName
             }).ToList();
         }
     }

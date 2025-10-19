@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChatApi.DA
+namespace ChatApi.DA.Interfaces
 {
     public interface IMessageRepository
     {

@@ -1,12 +1,13 @@
 ﻿using ChatApi.BL.DTOs;
-using ChatApi.DA;
+using ChatApi.BL.Interfaces;
+using ChatApi.DA.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChatApi.BL
+namespace ChatApi.BL.Services
 {
     public class UserService : IUserService
     {
